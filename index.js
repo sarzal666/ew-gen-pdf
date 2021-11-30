@@ -63,7 +63,7 @@ async function generate() {
     const today = new Date();
     addText(
         page,
-        "Dotyczy: " + today.getMonth() + "/" + today.getFullYear(),
+        "Dotyczy: " + getDocDate(),
         {
             ...paragraphStyles,
             y: state.currentY,
@@ -75,7 +75,7 @@ async function generate() {
         y:state.currentY,
     })
 
-    addText(page, process.env.ADDRESS,
+    addText(page, "Adres: " + process.env.ADDRESS,
         {
             ...paragraphStyles,
             y:state.currentY,
@@ -105,7 +105,7 @@ async function generate() {
 
     const pdfBytes = await pdfDoc.save();
 
-    await fs.writeFile("./ewidencja-"+ today.getMonth() +"-"+ today.getFullYear() +".pdf", pdfBytes, function (err) {
+    await fs.writeFile("./ewidencja-michal-sarzala-"+ getDocDate("-") +".pdf", pdfBytes, function (err) {
         if (err) console.log(err)
     });
 
@@ -119,6 +119,14 @@ function addText(page, text, styles) {
 
 function setState(state, key, value) {
     return state[key] = value;
+}
+
+function getDocDate(sign = "/") {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+
+    return month + sign + year;
 }
 
 generate();
